@@ -1,3 +1,3 @@
-module go-clean-architecture
+module cleango
 
 go 1.19
