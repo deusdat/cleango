@@ -25,10 +25,12 @@ func (s *basicUseCase) Execute(input string, p Presenter[int]) {
 
 type presenter struct {
 	errOccurred bool
+	stored      int
 }
 
 func (p *presenter) Present(answer Output[int]) {
 	if answer.Err == nil {
+		p.stored = answer.Answer
 		fmt.Printf("That worked fine. Answer is %d\n", answer.Answer)
 	} else {
 		fmt.Printf("Failed %s\n", answer.Err)

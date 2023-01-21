@@ -31,3 +31,8 @@ Work](https://www.oreilly.com/library/view/beginning-solid-principles/9781484218
 to coordinate multiple changes like writing to more than one collection in 
 an [ArangoDB](https://www.arangodb.com) or completing a database transaction 
 and deleting temp files.
+
+# Working example in unit tests
+Since Go lacks the ability to have test dependencies, this project does not 
+have a working rest or web example. However, it does have examples for 
+simple use cases and uses cases with a repositories and dependency injection.
