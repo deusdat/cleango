@@ -1,4 +1,4 @@
-package go_clean_architecture
+package cleango
 
 // Output is the common result of all use cases.
 type Output[T any] struct {

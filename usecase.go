@@ -1,4 +1,4 @@
-package go_clean_architecture
+package cleango
 
 // UseCase defines the core of the computational space. It only works on input and returns an Answer to the presenter
 // via dependency inject. Notice this method does not return a value. It doesn't even return an error. Any errors

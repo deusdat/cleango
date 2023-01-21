@@ -1,4 +1,4 @@
-package go_clean_architecture
+package cleango
 
 import (
 	"fmt"
@@ -10,8 +10,10 @@ type basicUseCase struct {
 	shouldPanic bool
 }
 
+// Execute a simple use case example that shows the flow of input, business logic, and presenter invocation.
 func (s *basicUseCase) Execute(input string, p Presenter[int]) {
 	fmt.Println(strings.ToLower(input))
+	// You'd never want to do this. However, it shows the WrapperUseCase in action.
 	if s.shouldPanic {
 		panic("implement me")
 	}
@@ -22,6 +24,7 @@ func (s *basicUseCase) Execute(input string, p Presenter[int]) {
 }
 
 type presenter struct {
+	errOccurred bool
 }
 
 func (p *presenter) Present(answer Output[int]) {
@@ -29,6 +32,7 @@ func (p *presenter) Present(answer Output[int]) {
 		fmt.Printf("That worked fine. Answer is %d\n", answer.Answer)
 	} else {
 		fmt.Printf("Failed %s\n", answer.Err)
+		p.errOccurred = true
 	}
 }
 
@@ -38,7 +42,11 @@ func TestWrappingUseCase_Execute(t *testing.T) {
 		Implementation: &basicUseCase{},
 	}
 
-	wrapAsUseCase.Execute("hello, world", &presenter{})
+	p := &presenter{}
+	wrapAsUseCase.Execute("hello, world", p)
+	if p.errOccurred {
+		t.Fatal("should not have failed")
+	}
 
 	wrapAsUseCase = &WrappingUseCase[string, int]{
 		Implementation: &basicUseCase{
@@ -46,5 +54,8 @@ func TestWrappingUseCase_Execute(t *testing.T) {
 		},
 	}
 
-	wrapAsUseCase.Execute("hello, world", &presenter{})
+	wrapAsUseCase.Execute("hello, world", p)
+	if !p.errOccurred {
+		t.Fatal("should have failed")
+	}
 }

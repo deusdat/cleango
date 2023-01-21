@@ -1,4 +1,4 @@
-package go_clean_architecture
+package cleango
 
 import "fmt"
 
