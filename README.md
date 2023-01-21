@@ -1,4 +1,4 @@
-# go-clean-architecture
+# cleango
 
 The purpose of this library is to provide a set of pre-build artifacts that
 conform to the key elements of Clean Architecture as described by Uncle Bob
