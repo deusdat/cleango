@@ -17,7 +17,7 @@ errors (maybe a middleware does that), creates a new response and sends it
 over the wire. The result is a hard-to-test set of assumptions and coupling. 
 
 Clean, as its name implies, works to stratify your code into isolated chunks 
-that coordinate via **Dependency Inject**. A controller gets a dependency 
+that coordinate via **Dependency Injection**. A controller gets a dependency 
 injector passed to it to create Use Cases and Presenters. Those in turn have 
 parts injected into them like a Repository to get data. Those Repositories 
 are defined by interfaces. The Use Case doesn't care that the Repository 
