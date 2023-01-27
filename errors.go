@@ -1,6 +1,9 @@
 package cleango
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 type ErrorKind int
 
@@ -58,4 +61,21 @@ func (d *DomainError) Error() string {
 	}
 	kind := toHuman[d.Kind]
 	return fmt.Sprintf("%s - %s", kind, d.Message)
+}
+
+var ToDomainErrorMessage = "converted error"
+
+// ToDomainError will wrap an error. If the error is not a domain error, it will create one with the
+// underlying cause set to the original err value.
+func ToDomainError(extraMessage string, err error) error {
+	var possibleDomainError *DomainError
+	if errors.As(err, &possibleDomainError) {
+		return fmt.Errorf(extraMessage, err)
+	}
+	return fmt.Errorf(extraMessage, &DomainError{
+		Kind:            System,
+		Message:         ToDomainErrorMessage,
+		UnderlyingCause: nil,
+		Issues:          nil,
+	})
 }
