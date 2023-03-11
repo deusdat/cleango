@@ -3,6 +3,7 @@ package cleango
 import (
 	"errors"
 	"fmt"
+	"strings"
 )
 
 type ErrorKind int
@@ -33,7 +34,7 @@ type DomainError struct {
 	// UnderlyingCause the source error that caused this. Not to be confused with a wrapped error. This is error is
 	// optional and to be used, if necessary, to provide an outer layer detailed information that might not need to
 	// be communicated with the caller.
-	UnderlyingCause any
+	UnderlyingCause error
 	// Issues an issues that occurred while validating input. Should be paired with InvalidInput, but it's your
 	// code base.
 	Issues []ValidationIssue
@@ -69,13 +70,17 @@ var ToDomainErrorMessage = "converted error"
 // underlying cause set to the original err value.
 func ToDomainError(extraMessage string, err error) error {
 	var possibleDomainError *DomainError
+	if !strings.Contains(extraMessage, "%w") {
+		// Make sure the error is properly wrapped.
+		extraMessage += extraMessage + " %w"
+	}
 	if errors.As(err, &possibleDomainError) {
 		return fmt.Errorf(extraMessage, err)
 	}
 	return fmt.Errorf(extraMessage, &DomainError{
 		Kind:            System,
 		Message:         ToDomainErrorMessage,
-		UnderlyingCause: nil,
+		UnderlyingCause: err,
 		Issues:          nil,
 	})
 }

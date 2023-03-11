@@ -1,5 +1,10 @@
 package cleango
 
+import (
+	"errors"
+	"fmt"
+)
+
 // UseCase defines the core of the computational space. It only works on input and returns an Answer to the presenter
 // via dependency inject. Notice this method does not return a value. It doesn't even return an error. Any errors
 // encountered during calculation should be sent to the presenter via the Present method.
@@ -27,7 +32,7 @@ func (w *WrappingUseCase[Input, Answer]) Execute(input Input, p Presenter[Answer
 				Err: &DomainError{
 					Kind:            System,
 					Message:         RecoveryMessage,
-					UnderlyingCause: r,
+					UnderlyingCause: errors.New(fmt.Sprintf("%s", r)),
 					Issues:          nil,
 				},
 			})
