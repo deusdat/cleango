@@ -24,14 +24,8 @@ func TestErrors(t *testing.T) {
 			Kind:    InvalidInput,
 			Message: "bad param {jimmy}",
 		})
-	if errors.As(de, &asDomain) {
-		if !errors.As(asDomain.UnderlyingCause, &asDomain) {
-			t.Fatal("should have been domain")
-		}
-		if asDomain.Kind != InvalidInput {
-			t.Fatal("incorrect mapping")
-		}
-	} else {
-		t.Fatalf("could not convert domain error")
+	if !errors.As(de, &asDomain) ||
+		errors.Unwrap(de) != asDomain {
+		t.Fatalf("unwrapped message did not match source")
 	}
 }
