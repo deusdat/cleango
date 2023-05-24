@@ -19,8 +19,11 @@ const (
 
 // ValidationIssue detail about where an input is wrong. Recommended to use a json path.
 type ValidationIssue struct {
-	Path    string
+	Path string
+	// Message basically anything you want. You can put codes for i18n lookups.
 	Message string
+	// Cardinality allows to contextualize messages like, too many items. No more than Cardinality.
+	Cardinality int
 }
 
 // DomainError is the only error definition that is used by domain layer. All repositories and use cases should
