@@ -15,6 +15,8 @@ const (
 	NotFound
 	// InvalidInput indicates that the input was expected in some way
 	InvalidInput
+	// Duplicate indicates that a resource already exists.
+	Duplicate
 )
 
 // ValidationIssue detail about where an input is wrong. Recommended to use a json path.
