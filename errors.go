@@ -68,26 +68,34 @@ func (d *DomainError) Error() string {
 		return "domain error was nil"
 	}
 	kind := toHuman[d.Kind]
-	return fmt.Sprintf("%s - %s", kind, d.Message)
+	errMsg := "[%s - %s]"
+	all := []any{kind, d.Message}
+	if d.UnderlyingCause != nil {
+		all = append(all, d.UnderlyingCause.Error())
+		errMsg = "[%s - %s (%s)]"
+	}
+
+	return fmt.Sprintf(errMsg, all...)
 }
 
 var ToDomainErrorMessage = "converted error"
 
-// ToDomainError will wrap an error. If the error is not a domain error, it will create one with the
-// underlying cause set to the original err value.
+// ToDomainError will wrap an error. If the error is not a domain error,
+// it will create one with the underlying cause set to the original err value.
+// This way all errors will unwrap to a DomainError.
 func ToDomainError(extraMessage string, err error) error {
 	var possibleDomainError *DomainError
-	if !strings.Contains(extraMessage, "%w") {
-		// Make sure the error is properly wrapped.
-		extraMessage += extraMessage + " %w"
-	}
 	if errors.As(err, &possibleDomainError) {
+		if !strings.Contains(extraMessage, "%w") {
+			// Make sure the error is properly wrapped.
+			extraMessage += " (%w)"
+		}
 		return fmt.Errorf(extraMessage, err)
 	}
-	return fmt.Errorf(extraMessage, &DomainError{
+	return &DomainError{
 		Kind:            System,
-		Message:         ToDomainErrorMessage,
+		Message:         extraMessage,
 		UnderlyingCause: err,
 		Issues:          nil,
-	})
+	}
 }
