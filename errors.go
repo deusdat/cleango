@@ -83,7 +83,14 @@ var ToDomainErrorMessage = "converted error"
 // ToDomainError will wrap an error. If the error is not a domain error,
 // it will create one with the underlying cause set to the original err value.
 // This way all errors will unwrap to a DomainError.
+//
+// If err is nil, return nil. Supports cases where Anwer and Err are set in presenter
+// after a simple service invocation.
 func ToDomainError(extraMessage string, err error) error {
+	if err == nil {
+		return nil
+	}
+
 	var possibleDomainError *DomainError
 	if errors.As(err, &possibleDomainError) {
 		if !strings.Contains(extraMessage, "%w") {
