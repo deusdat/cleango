@@ -30,3 +30,12 @@ type Output[T any] struct {
 type Presenter[T any] interface {
 	Present(answer Output[T])
 }
+
+// PresenterFunc is a simple implementation of Presenter that takes a function as argument. Useful for testing.
+type PresenterFunc[T any] struct {
+	fn func(Output[T])
+}
+
+func (p *PresenterFunc[T]) Present(answer Output[T]) {
+	p.fn(answer)
+}
