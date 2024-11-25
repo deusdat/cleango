@@ -36,3 +36,11 @@ and deleting temp files.
 Since Go lacks the ability to have test dependencies, this project does not 
 have a working rest or web example. However, it does have examples for 
 simple use cases and uses cases with a repositories and dependency injection.
+
+# Functional Approach
+Sometimes creating a whole struct for a use case is overkill. You might need
+a short operation for architectural purity (you want a use case but it only call
+a simple service). You might want to create a stubbed use case for testing purposes.
+That's where `FunctionalUseCase` comes in. Pass it a function that takes the 
+appropriate generic input and presenter. It invokes everything appropriately, allowing
+you to get your code out faster.
