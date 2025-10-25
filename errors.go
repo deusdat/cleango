@@ -25,9 +25,9 @@ type ValidationIssue struct {
 	// Message basically anything you want. You can put codes for i18n lookups.
 	Message string
 	// Min allows you to specify the lower bound of field.
-	Min int
+	Min *int `json:"min,omitempty"`
 	// Max allows you to specify the upper bound of a field.
-	Max int
+	Max *int `json:"max,omitempty"`
 }
 
 // DomainError is the only error definition that is used by domain layer. All repositories and use cases should
