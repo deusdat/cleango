@@ -1,5 +1,7 @@
 package cleango
 
+import "context"
+
 // Output is the common result of all use cases.
 type Output[T any] struct {
 	Answer T
@@ -31,6 +33,10 @@ type Presenter[T any] interface {
 	Present(answer Output[T])
 }
 
+type PresenterWithContext[T any] interface {
+	Present(ctx context.Context, answer Output[T])
+}
+
 // PresenterFunc is a simple implementation of Presenter that takes a function as argument. Useful for testing.
 type PresenterFunc[T any] struct {
 	FN func(Output[T])
@@ -38,4 +44,13 @@ type PresenterFunc[T any] struct {
 
 func (p *PresenterFunc[T]) Present(answer Output[T]) {
 	p.FN(answer)
+}
+
+// PresenterFunc is a simple implementation of Presenter that takes a function as argument. Useful for testing.
+type PresenterFuncWithContext[T any] struct {
+	FN func(context.Context, Output[T])
+}
+
+func (p *PresenterFuncWithContext[T]) Present(ctx context.Context, answer Output[T]) {
+	p.FN(ctx, answer)
 }
