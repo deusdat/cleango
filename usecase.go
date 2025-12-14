@@ -2,7 +2,6 @@ package cleango
 
 import (
 	"context"
-	"errors"
 	"fmt"
 )
 
@@ -15,7 +14,7 @@ type UseCase[Input any, Answer any] interface {
 
 // Same idea as the regular use case but context aware.
 type UseCaseWithContext[Input any, Answer any] interface {
-	Execute(context.Context, Input, Presenter[Answer])
+	Execute(context.Context, Input, PresenterWithContext[Answer])
 }
 
 // WrappingUseCase a use case that holds another use case in order to make sure presenter is always caused with
@@ -38,7 +37,7 @@ func (w *WrappingUseCase[Input, Answer]) Execute(input Input, p Presenter[Answer
 				Err: &DomainError{
 					Kind:            System,
 					Message:         RecoveryMessage,
-					UnderlyingCause: errors.New(fmt.Sprintf("%s", r)),
+					UnderlyingCause: fmt.Errorf("%s", r),
 					Issues:          nil,
 				},
 			})
