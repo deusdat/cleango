@@ -1,6 +1,7 @@
 package cleango
 
 import (
+	"context"
 	"errors"
 	"fmt"
 )
@@ -10,6 +11,11 @@ import (
 // encountered during calculation should be sent to the presenter via the Present method.
 type UseCase[Input any, Answer any] interface {
 	Execute(Input, Presenter[Answer])
+}
+
+// Same idea as the regular use case but context aware.
+type UseCaseWithContext[Input any, Answer any] interface {
+	Execute(context.Context, Input, Presenter[Answer])
 }
 
 // WrappingUseCase a use case that holds another use case in order to make sure presenter is always caused with
