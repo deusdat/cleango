@@ -1,6 +1,7 @@
 package cleango
 
 import (
+	"context"
 	"fmt"
 	"strings"
 	"testing"
@@ -59,5 +60,34 @@ func TestWrappingUseCase_Execute(t *testing.T) {
 	wrapAsUseCase.Execute("hello, world", p)
 	if !p.errOccurred {
 		t.Fatal("should have failed")
+	}
+}
+
+func TestFunctionalUseCaseWithContext(t *testing.T) {
+
+	wrapper := &FunctionalUseCaseWithContext[int, int]{
+		ExecuteFunc: func(i int) (int, error) {
+			return i * i, nil
+		},
+	}
+	p := &presenter{}
+
+	// Makes sure a success flows properly
+	wrapper.Execute(context.Background(), 10, p)
+	if p.stored != 100 {
+		t.Fatal("presenter not invoked properly")
+	}
+}
+
+func TestFunctionUseCaseWithContextHandlesError(t *testing.T) {
+	wrapper := &FunctionalUseCaseWithContext[int, int]{
+		ExecuteFunc: func(i int) (int, error) {
+			return i, fmt.Errorf("should break")
+		},
+	}
+	p := &presenter{}
+	wrapper.Execute(context.Background(), 10, p)
+	if !p.errOccurred {
+		t.Fatal("should have errored")
 	}
 }
