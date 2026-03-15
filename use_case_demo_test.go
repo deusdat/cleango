@@ -66,7 +66,7 @@ func TestWrappingUseCase_Execute(t *testing.T) {
 func TestFunctionalUseCaseWithContext(t *testing.T) {
 
 	wrapper := &FunctionalUseCaseWithContext[int, int]{
-		ExecuteFunc: func(i int) (int, error) {
+		ExecuteFunc: func(ctx context.Context, i int) (int, error) {
 			return i * i, nil
 		},
 	}
@@ -81,7 +81,7 @@ func TestFunctionalUseCaseWithContext(t *testing.T) {
 
 func TestFunctionUseCaseWithContextHandlesError(t *testing.T) {
 	wrapper := &FunctionalUseCaseWithContext[int, int]{
-		ExecuteFunc: func(i int) (int, error) {
+		ExecuteFunc: func(ctx context.Context, i int) (int, error) {
 			return i, fmt.Errorf("should break")
 		},
 	}

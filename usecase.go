@@ -69,12 +69,12 @@ func NewFunctionalUseCase[Input any, Answer any](executeFunc func(Input) (Answer
 
 // FunctionalUseCaseWithContext is a generic implementation of UseCase that takes a function to act as the Execute method including the context.
 type FunctionalUseCaseWithContext[Input any, Answer any] struct {
-	ExecuteFunc func(Input) (Answer, error)
+	ExecuteFunc func(context.Context, Input) (Answer, error)
 }
 
 // Execute runs the provided function and passes its result to the presenter.
 func (f *FunctionalUseCaseWithContext[Input, Answer]) Execute(ctx context.Context, input Input, p Presenter[Answer]) {
-	answer, err := f.ExecuteFunc(input)
+	answer, err := f.ExecuteFunc(ctx, input)
 	p.Present(Output[Answer]{
 		Answer: answer,
 		Err:    err,
