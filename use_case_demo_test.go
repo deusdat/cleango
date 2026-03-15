@@ -39,6 +39,21 @@ func (p *presenter) Present(answer Output[int]) {
 	}
 }
 
+type presenterWithContext struct {
+	errOccurred bool
+	stored      int
+}
+
+func (p *presenterWithContext) Present(ctx context.Context, answer Output[int]) {
+	if answer.Err == nil {
+		p.stored = answer.Answer
+		fmt.Printf("That worked fine. Answer is %d\n", answer.Answer)
+	} else {
+		fmt.Printf("Failed %s\n", answer.Err)
+		p.errOccurred = true
+	}
+}
+
 func TestWrappingUseCase_Execute(t *testing.T) {
 	var wrapAsUseCase UseCase[string, int]
 	wrapAsUseCase = &WrappingUseCase[string, int]{
@@ -70,7 +85,7 @@ func TestFunctionalUseCaseWithContext(t *testing.T) {
 			return i * i, nil
 		},
 	}
-	p := &presenter{}
+	p := &presenterWithContext{}
 
 	// Makes sure a success flows properly
 	wrapper.Execute(context.Background(), 10, p)
@@ -85,7 +100,7 @@ func TestFunctionUseCaseWithContextHandlesError(t *testing.T) {
 			return i, fmt.Errorf("should break")
 		},
 	}
-	p := &presenter{}
+	p := &presenterWithContext{}
 	wrapper.Execute(context.Background(), 10, p)
 	if !p.errOccurred {
 		t.Fatal("should have errored")

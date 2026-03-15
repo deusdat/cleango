@@ -75,7 +75,7 @@ type FunctionalUseCaseWithContext[Input any, Answer any] struct {
 // Execute runs the provided function and passes its result to the presenter.
 func (f *FunctionalUseCaseWithContext[Input, Answer]) Execute(ctx context.Context, input Input, p PresenterWithContext[Answer]) {
 	answer, err := f.ExecuteFunc(ctx, input)
-	p.Present(Output[Answer]{
+	p.Present(ctx, Output[Answer]{
 		Answer: answer,
 		Err:    err,
 	})
