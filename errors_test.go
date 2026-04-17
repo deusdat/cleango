@@ -19,7 +19,7 @@ func TestErrors(t *testing.T) {
 		t.Fatalf("unknown underlying cause %s", asDomain.UnderlyingCause)
 	}
 
-	if asDomain.Error() != "[system - converted error (not domain)]" {
+	if asDomain.Error() != "[system - no wrap message (not domain)]" {
 		t.Fatal("did not nest call stack properly", asDomain.Error())
 	}
 

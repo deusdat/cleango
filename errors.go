@@ -75,7 +75,15 @@ func (d *DomainError) Error() string {
 		errMsg = "[%s - %s (%s)]"
 	}
 
-	return fmt.Sprintf(errMsg, all...)
+	result := fmt.Sprintf(errMsg, all...)
+	if len(d.Issues) > 0 {
+		issueStrs := make([]string, len(d.Issues))
+		for i, issue := range d.Issues {
+			issueStrs[i] = issue.Path + ": " + issue.Message
+		}
+		result += " issues=[" + strings.Join(issueStrs, ", ") + "]"
+	}
+	return result
 }
 
 var ToDomainErrorMessage = "converted error"
